@@ -3,7 +3,8 @@ project(blackjack)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(blackjack src/main.cpp)
+add_executable(blackjack src/main.cpp
+        src/card.cpp)
 
 
 # SETUP FOR SFML

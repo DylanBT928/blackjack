@@ -1,33 +1,39 @@
 #include <iostream>
-#include <map>
+#include "card.cpp"
+
+
+std::vector<Card> makeDeck()
+{
+    return {
+        Card('K', 10), Card('K', 10), Card('K', 10), Card('K', 10),
+        Card('Q', 10), Card('Q', 10), Card('Q', 10), Card('Q', 10),
+        Card('J', 10), Card('J', 10), Card('J', 10), Card('J', 10),
+        Card('T', 10), Card('T', 10), Card('T', 10), Card('T', 10),
+        Card('9', 9), Card('9', 9), Card('9', 9), Card('9', 9),
+        Card('8', 8), Card('8', 8), Card('8', 8), Card('8', 8),
+        Card('7', 7), Card('7', 7), Card('7', 7), Card('7', 7),
+        Card('6', 6), Card('6', 6), Card('6', 6), Card('6', 6),
+        Card('5', 5), Card('5', 5), Card('5', 5), Card('5', 5),
+        Card('4', 4), Card('4', 4), Card('4', 4), Card('4', 4),
+        Card('3', 3), Card('3', 3), Card('3', 3), Card('3', 3),
+        Card('2', 2), Card('2', 2), Card('2', 2), Card('2', 2),
+        Card('A', 1), Card('A', 1), Card('A', 1), Card('A', 1),
+    };
+};
+
 
 int main()
 {
-    std::unordered_map<char, int> values = {
-        {'K', 10}, {'Q', 10}, {'J', 10},
-        {'T', 10}, {'9', 9}, {'8', 8},
-        {'7', 7}, {'6', 6}, {'5', 5},
-        {'4', 4}, {'3', 3}, {'2', 2},
-        {'A', 1}
-    };
+    std::vector<Card> deck = makeDeck();
 
-    char deck[] = {
-        'K', 'K', 'K', 'K',
-        'Q', 'Q', 'Q', 'Q',
-        'J', 'J', 'J', 'J',
-        'T', 'T', 'T', 'T',
-        '9', '9', '9', '9',
-        '8', '8', '8', '8',
-        '7', '7', '7', '7',
-        '6', '6', '6', '6',
-        '5', '5', '5', '5',
-        '4', '4', '4', '4',
-        '3', '3', '3', '3',
-        '2', '2', '2', '2',
-        'A', 'A', 'A', 'A'
-    };
+    std::cout << "Deck: ";
+    for (auto &card : deck)
+    {
+        std::cout << card.getCard() << ' ';
+    }
+    std::cout << '\n';
 
-    std::cout << "Cards Left: " << sizeof(deck) << std::endl;
+    std::cout << "Cards Left: " << deck.size() << std::endl;
     std::cout << "Dealer's Hand: " << std::endl;
     std::cout << "Your Hand: " << std::endl;
 
