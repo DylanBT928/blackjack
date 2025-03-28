@@ -1,5 +1,30 @@
+#include <algorithm>
 #include <iostream>
+#include <random>
 #include "card.cpp"
+
+
+std::vector<Card> makeDeck();
+std::vector<Card> shuffleDeck(std::vector<Card> deck);
+
+
+int main()
+{
+    std::vector<Card> deck = shuffleDeck(makeDeck());
+
+    std::cout << "Deck: ";
+    for (auto &card : deck)
+    {
+        std::cout << card.getCard() << ' ';
+    }
+    std::cout << '\n';
+
+    std::cout << "Cards Left: " << deck.size() << std::endl;
+    std::cout << "Dealer's Hand: " << std::endl;
+    std::cout << "Your Hand: " << std::endl;
+
+    return 0;
+}
 
 
 std::vector<Card> makeDeck()
@@ -19,23 +44,13 @@ std::vector<Card> makeDeck()
         Card('2', 2), Card('2', 2), Card('2', 2), Card('2', 2),
         Card('A', 1), Card('A', 1), Card('A', 1), Card('A', 1),
     };
-};
+}
 
 
-int main()
+std::vector<Card> shuffleDeck(std::vector<Card> deck)
 {
-    std::vector<Card> deck = makeDeck();
-
-    std::cout << "Deck: ";
-    for (auto &card : deck)
-    {
-        std::cout << card.getCard() << ' ';
-    }
-    std::cout << '\n';
-
-    std::cout << "Cards Left: " << deck.size() << std::endl;
-    std::cout << "Dealer's Hand: " << std::endl;
-    std::cout << "Your Hand: " << std::endl;
-
-    return 0;
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::shuffle(deck.begin(), deck.end(), generator);
+    return deck;
 }
