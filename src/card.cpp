@@ -1,21 +1,17 @@
-#include <iostream>
-
-
 class Card
 {
-public:
-    std::string card;
+protected:
+    char card;
     int value;
 
 
-    Card(char c, int v)
+public:
+    Card(char c, int v) : card(c), value(v)
     {
-        card = c;
-        value = v;
     }
 
 
-    std::string getCard()
+    char getCard()
     {
         return card;
     }

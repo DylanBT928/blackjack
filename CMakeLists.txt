@@ -4,7 +4,8 @@ project(blackjack)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(blackjack src/main.cpp
-        src/card.cpp)
+        src/card.cpp
+        src/game.cpp)
 
 
 # SETUP FOR SFML
