@@ -1,14 +1,12 @@
 #include "game.cpp"
 
-
 int main()
 {
-    Game blackjack;
+    Game blackjack(10);
 
     while (blackjack.isRunning())
     {
-        blackjack.printGameState();
-        blackjack.endRound();
+        blackjack.playRound();
     }
 
     return 0;

@@ -1,38 +1,35 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include "card.cpp"
 
+#include "card.cpp"
 
 class Game
 {
-protected:
-    std::vector<Card> deck = {};
-    std::vector<Card> dealerHand = {};
-    std::vector<Card> playerHand = {};
-    bool running = true;
-    int rounds = 1;
-
+   protected:
+    std::vector<Card> deck;
+    std::vector<Card> dealerHand;
+    std::vector<Card> playerHand;
+    int currentRound;
+    int rounds;
+    bool stand;
 
     void makeDeck()
     {
-        deck = {
-            Card('K', 10), Card('K', 10), Card('K', 10), Card('K', 10),
-            Card('Q', 10), Card('Q', 10), Card('Q', 10), Card('Q', 10),
-            Card('J', 10), Card('J', 10), Card('J', 10), Card('J', 10),
-            Card('T', 10), Card('T', 10), Card('T', 10), Card('T', 10),
-            Card('9', 9), Card('9', 9), Card('9', 9), Card('9', 9),
-            Card('8', 8), Card('8', 8), Card('8', 8), Card('8', 8),
-            Card('7', 7), Card('7', 7), Card('7', 7), Card('7', 7),
-            Card('6', 6), Card('6', 6), Card('6', 6), Card('6', 6),
-            Card('5', 5), Card('5', 5), Card('5', 5), Card('5', 5),
-            Card('4', 4), Card('4', 4), Card('4', 4), Card('4', 4),
-            Card('3', 3), Card('3', 3), Card('3', 3), Card('3', 3),
-            Card('2', 2), Card('2', 2), Card('2', 2), Card('2', 2),
-            Card('A', 1), Card('A', 1), Card('A', 1), Card('A', 1),
-        };
+        deck = {Card('K', 10), Card('K', 10), Card('K', 10), Card('K', 10),
+                Card('Q', 10), Card('Q', 10), Card('Q', 10), Card('Q', 10),
+                Card('J', 10), Card('J', 10), Card('J', 10), Card('J', 10),
+                Card('T', 10), Card('T', 10), Card('T', 10), Card('T', 10),
+                Card('9', 9),  Card('9', 9),  Card('9', 9),  Card('9', 9),
+                Card('8', 8),  Card('8', 8),  Card('8', 8),  Card('8', 8),
+                Card('7', 7),  Card('7', 7),  Card('7', 7),  Card('7', 7),
+                Card('6', 6),  Card('6', 6),  Card('6', 6),  Card('6', 6),
+                Card('5', 5),  Card('5', 5),  Card('5', 5),  Card('5', 5),
+                Card('4', 4),  Card('4', 4),  Card('4', 4),  Card('4', 4),
+                Card('3', 3),  Card('3', 3),  Card('3', 3),  Card('3', 3),
+                Card('2', 2),  Card('2', 2),  Card('2', 2),  Card('2', 2),
+                Card('A', 1),  Card('A', 1),  Card('A', 1),  Card('A', 1)};
     }
-
 
     void shuffleDeck()
     {
@@ -41,54 +38,57 @@ protected:
         std::shuffle(deck.begin(), deck.end(), generator);
     }
 
-
-public:
-    explicit Game(int r = 1) : rounds(r)
+   public:
+    explicit Game(int r = 1) : rounds(r), currentRound(1), stand(false)
     {
         makeDeck();
         shuffleDeck();
+        hit(playerHand);
+        hit(dealerHand);
+        hit(playerHand);
+        hit(dealerHand);
     }
 
+    std::vector<Card> getDeck() { return deck; }
 
-    std::vector<Card> getDeck()
+    std::vector<Card> getDealerHand() { return dealerHand; }
+
+    std::vector<Card> getPlayerHand() { return playerHand; }
+
+    bool isRunning() { return currentRound <= rounds; }
+
+    int getCurrentRound() { return currentRound; }
+
+    int getRounds() { return rounds; }
+
+    void hit(std::vector<Card> &hand)
     {
-        return deck;
+        hand.push_back(deck.back());
+        deck.pop_back();
     }
 
-
-    std::vector<Card> getDealerHand()
+    void playRound()
     {
-        return dealerHand;
+        char choice;
+        stand = false;
+        while (!stand)
+        {
+            printGameState();
+            std::cout << "Hit or stand? (h/s): ";
+            std::cin >> choice;
+            if (tolower(choice) == 'h')
+            {
+                hit(playerHand);
+            }
+            else if (tolower(choice) == 's')
+            {
+                stand = true;
+                currentRound++;
+            }
+        }
     }
 
-
-    std::vector<Card> getPlayerHand()
-    {
-        return playerHand;
-    }
-
-
-    bool isRunning()
-    {
-        if (rounds == 0)
-            running = false;
-        return running;
-    }
-
-
-    int getRounds()
-    {
-        return rounds;
-    }
-
-
-    void endRound()
-    {
-        rounds--;
-    }
-
-
-    void printGameState()
+    void printDeck()
     {
         std::cout << "Deck: ";
         for (auto &card : deck)
@@ -96,21 +96,29 @@ public:
             std::cout << card.getCard() << ' ';
         }
         std::cout << '\n';
+    }
+
+    void printHand(std::vector<Card> hand)
+    {
+        for (auto &card : hand)
+        {
+            std::cout << card.getCard() << ' ';
+        }
+        std::cout << '\n';
+    }
+
+    void printGameState()
+    {
+        std::cout << "\nRound " << currentRound << '/' << rounds << std::endl;
+
+        printDeck();
 
         std::cout << "Cards Left: " << deck.size() << std::endl;
 
         std::cout << "Dealer's Hand: ";
-        for (auto &card : dealerHand)
-        {
-            std::cout << card.getCard() << ' ';
-        }
-        std::cout << '\n';
+        printHand(dealerHand);
 
         std::cout << "Your Hand: ";
-        for (auto &card : playerHand)
-        {
-            std::cout << card.getCard() << ' ';
-        }
-        std::cout << '\n';
+        printHand(playerHand);
     }
 };

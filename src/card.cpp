@@ -1,24 +1,13 @@
 class Card
 {
-protected:
+   protected:
     char card;
     int value;
 
+   public:
+    Card(char c, int v) : card(c), value(v) {}
 
-public:
-    Card(char c, int v) : card(c), value(v)
-    {
-    }
+    char getCard() { return card; }
 
-
-    char getCard()
-    {
-        return card;
-    }
-
-
-    int getValue()
-    {
-        return value;
-    }
+    int getValue() { return value; }
 };
