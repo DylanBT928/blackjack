@@ -43,10 +43,7 @@ class Game
     {
         makeDeck();
         shuffleDeck();
-        hit(playerHand);
-        hit(dealerHand);
-        hit(playerHand);
-        hit(dealerHand);
+        resetRound();
     }
 
     std::vector<Card> getDeck() { return deck; }
@@ -67,6 +64,16 @@ class Game
         deck.pop_back();
     }
 
+    void resetRound()
+    {
+        dealerHand.clear();
+        playerHand.clear();
+        hit(playerHand);
+        hit(dealerHand);
+        hit(playerHand);
+        hit(dealerHand);
+    }
+
     void playRound()
     {
         char choice;
@@ -84,6 +91,7 @@ class Game
             {
                 stand = true;
                 currentRound++;
+                resetRound();
             }
         }
     }
@@ -107,6 +115,16 @@ class Game
         std::cout << '\n';
     }
 
+    void printHandTotal(std::vector<Card> hand)
+    {
+        int total = 0;
+        for (auto &card : hand)
+        {
+            total += card.getValue();
+        }
+        std::cout << "Total: " << total << std::endl;
+    }
+
     void printGameState()
     {
         std::cout << "\nRound " << currentRound << '/' << rounds << std::endl;
@@ -117,8 +135,10 @@ class Game
 
         std::cout << "Dealer's Hand: ";
         printHand(dealerHand);
+        printHandTotal(dealerHand);
 
         std::cout << "Your Hand: ";
         printHand(playerHand);
+        printHandTotal(playerHand);
     }
 };
