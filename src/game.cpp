@@ -12,6 +12,8 @@ class Game
     std::vector<Card> playerHand;
     int currentRound;
     int rounds;
+    int dealerScore;
+    int playerScore;
     bool stand;
 
     void makeDeck()
@@ -39,7 +41,12 @@ class Game
     }
 
    public:
-    explicit Game(int r = 1) : rounds(r), currentRound(1), stand(false)
+    explicit Game(int r = 1)
+        : rounds(r),
+          currentRound(1),
+          dealerScore(0),
+          playerScore(0),
+          stand(false)
     {
         makeDeck();
         shuffleDeck();
@@ -57,6 +64,12 @@ class Game
     int getCurrentRound() { return currentRound; }
 
     int getRounds() { return rounds; }
+
+    int getDealerScore() { return dealerScore; }
+
+    int getPlayerScore() { return playerScore; }
+
+    bool getStand() { return stand; }
 
     void hit(std::vector<Card> &hand)
     {
@@ -89,11 +102,27 @@ class Game
             }
             else if (tolower(choice) == 's')
             {
+                chooseWinner();
                 stand = true;
                 currentRound++;
                 resetRound();
             }
         }
+    }
+
+    void chooseWinner()
+    {
+        if (getHandTotal(playerHand) == getHandTotal(dealerHand))
+            ;  // TODO: handle double down
+        else if (getHandTotal(playerHand) > getHandTotal(dealerHand))
+            playerScore++;
+        else
+            dealerScore++;
+    }
+
+    void printScores()
+    {
+        std::cout << " (" << playerScore << '-' << dealerScore << ")\n";
     }
 
     void printDeck()
@@ -115,30 +144,36 @@ class Game
         std::cout << '\n';
     }
 
-    void printHandTotal(std::vector<Card> hand)
+    int getHandTotal(std::vector<Card> hand)
     {
         int total = 0;
         for (auto &card : hand)
         {
             total += card.getValue();
         }
-        std::cout << "Total: " << total << std::endl;
+        return total;
+    }
+
+    void printHandTotal(std::vector<Card> hand)
+    {
+        std::cout << "Total: " << getHandTotal(hand) << std::endl;
     }
 
     void printGameState()
     {
-        std::cout << "\nRound " << currentRound << '/' << rounds << std::endl;
+        std::cout << "\nRound " << currentRound << '/' << rounds;
+        printScores();
 
         printDeck();
 
         std::cout << "Cards Left: " << deck.size() << std::endl;
 
-        std::cout << "Dealer's Hand: ";
-        printHand(dealerHand);
-        printHandTotal(dealerHand);
-
         std::cout << "Your Hand: ";
         printHand(playerHand);
         printHandTotal(playerHand);
+
+        std::cout << "Dealer's Hand: ";
+        printHand(dealerHand);
+        printHandTotal(dealerHand);
     }
 };
