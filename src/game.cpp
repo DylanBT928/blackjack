@@ -75,6 +75,11 @@ class Game
     {
         hand.push_back(deck.back());
         deck.pop_back();
+        if (deck.empty())
+        {
+            makeDeck();
+            shuffleDeck();
+        }
     }
 
     void resetRound()
@@ -112,11 +117,9 @@ class Game
 
     void chooseWinner()
     {
-        if (getHandTotal(playerHand) == getHandTotal(dealerHand))
-            ;  // TODO: handle double down
-        else if (getHandTotal(playerHand) > getHandTotal(dealerHand))
+        if (getHandTotal(playerHand) > getHandTotal(dealerHand))
             playerScore++;
-        else
+        else if (getHandTotal(playerHand) < getHandTotal(dealerHand))
             dealerScore++;
     }
 
