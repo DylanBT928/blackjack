@@ -96,7 +96,7 @@ class Game
     {
         char choice;
         stand = false;
-        while (!stand)
+        while (!stand || getHandTotal(dealerHand) <= 16)
         {
             printGameState();
             std::cout << "Hit or stand? (h/s): ";
@@ -107,12 +107,17 @@ class Game
             }
             else if (tolower(choice) == 's')
             {
-                chooseWinner();
                 stand = true;
-                currentRound++;
-                resetRound();
+            }
+            if (getHandTotal(dealerHand) <= 16)
+            {
+                hit(dealerHand);
             }
         }
+        chooseWinner();
+        printWinner();
+        currentRound++;
+        resetRound();
     }
 
     void chooseWinner()
@@ -121,6 +126,21 @@ class Game
             playerScore++;
         else if (getHandTotal(playerHand) < getHandTotal(dealerHand))
             dealerScore++;
+    }
+
+    void printWinner()
+    {
+        std::cout << "\nWinner: ";
+        if (getHandTotal(playerHand) > getHandTotal(dealerHand))
+        {
+            std::cout << "Player ";
+        }
+        else if (getHandTotal(playerHand) < getHandTotal(dealerHand))
+        {
+            std::cout << "Dealer ";
+        }
+        std::cout << '(' << getHandTotal(playerHand) << '/'
+                  << getHandTotal(dealerHand) << ")\n";
     }
 
     void printScores()
