@@ -14,6 +14,8 @@ class Game
     int rounds;
     int dealerScore;
     int playerScore;
+    bool playerBust;
+    bool dealerBust;
     bool stand;
 
     void makeDeck()
@@ -46,6 +48,8 @@ class Game
           currentRound(1),
           dealerScore(0),
           playerScore(0),
+          dealerBust(0),
+          playerBust(0),
           stand(false)
     {
         makeDeck();
@@ -94,6 +98,7 @@ class Game
 
     void playRound()
     {
+        int winner;
         char choice;
         stand = false;
         while (!stand || getHandTotal(dealerHand) <= 16)
@@ -104,6 +109,12 @@ class Game
             if (tolower(choice) == 'h')
             {
                 hit(playerHand);
+                if (getHandTotal(playerHand) > 21)
+                {
+                    playerBust = true;
+                    std::cout << "Player busted.\n";
+                    break;
+                }
             }
             else if (tolower(choice) == 's')
             {
@@ -112,32 +123,69 @@ class Game
             if (getHandTotal(dealerHand) <= 16)
             {
                 hit(dealerHand);
+                if (getHandTotal(dealerHand) > 21)
+                {
+                    dealerBust = true;
+                    std::cout << "Dealer busted.\n";
+                    break;
+                }
             }
         }
-        chooseWinner();
-        printWinner();
+        winner = chooseWinner();
+        if (winner == 0)
+        {
+            playerScore++;
+        }
+        else if (winner == 1)
+        {
+            dealerScore++;
+        }
+        printWinner(winner);
         currentRound++;
         resetRound();
     }
 
-    void chooseWinner()
+    int chooseWinner()
     {
-        if (getHandTotal(playerHand) > getHandTotal(dealerHand))
-            playerScore++;
-        else if (getHandTotal(playerHand) < getHandTotal(dealerHand))
-            dealerScore++;
+        // Player: 0, Dealer: 1, Tie: -1
+        if (playerBust)
+        {
+            playerBust = false;
+            return 1;
+        }
+        else if (dealerBust)
+        {
+            dealerBust = false;
+            return 0;
+        }
+        else
+        {
+            if (getHandTotal(playerHand) > getHandTotal(dealerHand))
+            {
+                return 0;
+            }
+            else if (getHandTotal(playerHand) < getHandTotal(dealerHand))
+            {
+                return 1;
+            }
+        }
+        return -1;
     }
 
-    void printWinner()
+    void printWinner(int winner)
     {
         std::cout << "\nWinner: ";
-        if (getHandTotal(playerHand) > getHandTotal(dealerHand))
+        if (winner == 0)
         {
             std::cout << "Player ";
         }
-        else if (getHandTotal(playerHand) < getHandTotal(dealerHand))
+        else if (winner == 1)
         {
             std::cout << "Dealer ";
+        }
+        else
+        {
+            std::cout << "Tie ";
         }
         std::cout << '(' << getHandTotal(playerHand) << '/'
                   << getHandTotal(dealerHand) << ")\n";
