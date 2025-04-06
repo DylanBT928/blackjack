@@ -9,7 +9,7 @@ int main()
         blackjack.playRound();
     }
 
-    std::cout << "Game Over!" << std::endl;
+    blackjack.endGame();
 
     return 0;
 }

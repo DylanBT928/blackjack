@@ -101,9 +101,13 @@ class Game
         int winner;
         char choice;
         stand = false;
-        while (!stand || getHandTotal(dealerHand) <= 16)
+        while (!stand && playerHand.size() < 5)
         {
             printGameState();
+            if (playerHand.size() >= 5)
+            {
+                break;
+            }
             std::cout << "Hit or stand? (h/s): ";
             std::cin >> choice;
             if (tolower(choice) == 'h')
@@ -120,6 +124,19 @@ class Game
             {
                 stand = true;
             }
+            if (getHandTotal(dealerHand) <= 16)
+            {
+                hit(dealerHand);
+                if (getHandTotal(dealerHand) > 21)
+                {
+                    dealerBust = true;
+                    std::cout << "Dealer busted.\n";
+                    break;
+                }
+            }
+        }
+        while (getHandTotal(dealerHand) <= 16)
+        {
             if (getHandTotal(dealerHand) <= 16)
             {
                 hit(dealerHand);
@@ -160,7 +177,9 @@ class Game
         }
         else
         {
-            if (getHandTotal(playerHand) > getHandTotal(dealerHand))
+            if (getHandTotal(playerHand) > getHandTotal(dealerHand) ||
+                playerHand.size() >= 5)
+
             {
                 return 0;
             }
@@ -246,5 +265,11 @@ class Game
         std::cout << "Dealer's Hand: ";
         printHand(dealerHand);
         printHandTotal(dealerHand);
+    }
+
+    void endGame()
+    {
+        std::cout << "Game Over! " << std::endl;
+        std::cout << playerScore << '-' << dealerScore << std::endl;
     }
 };
