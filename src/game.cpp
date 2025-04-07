@@ -135,7 +135,7 @@ class Game
                 }
             }
         }
-        while (getHandTotal(dealerHand) <= 16)
+        while (getHandTotal(dealerHand) <= 16 && !playerBust)
         {
             if (getHandTotal(dealerHand) <= 16)
             {
@@ -239,6 +239,17 @@ class Game
         int total = 0;
         for (auto &card : hand)
         {
+            if (card.getCard() == 'A')
+            {
+                if (total + 10 <= 21)
+                {
+                    card.setValue(11);
+                }
+                else
+                {
+                    card.setValue(1);
+                }
+            }
             total += card.getValue();
         }
         return total;
@@ -265,6 +276,15 @@ class Game
         std::cout << "Dealer's Hand: ";
         printHand(dealerHand);
         printHandTotal(dealerHand);
+    }
+
+    void playGame()
+    {
+        while (isRunning())
+        {
+            playRound();
+        }
+        endGame();
     }
 
     void endGame()

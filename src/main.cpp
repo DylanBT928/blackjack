@@ -3,13 +3,7 @@
 int main()
 {
     Game blackjack(10);
-
-    while (blackjack.isRunning())
-    {
-        blackjack.playRound();
-    }
-
-    blackjack.endGame();
+    blackjack.playGame();
 
     return 0;
 }

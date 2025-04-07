@@ -10,4 +10,6 @@ class Card
     char getCard() { return card; }
 
     int getValue() { return value; }
+
+    void setValue(int v) { value = v; }
 };
