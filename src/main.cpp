@@ -4,7 +4,8 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({1200, 800}), "Blackjack");
+    sf::RenderWindow window(sf::VideoMode({1200, 800}), "Blackjack",
+                            sf::Style::Titlebar | sf::Style::Close);
 
     while (window.isOpen())
     {
@@ -17,7 +18,7 @@ int main()
             }
         }
 
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color(20, 60, 50));
 
         window.display();
     }
