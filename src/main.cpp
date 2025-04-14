@@ -1,5 +1,5 @@
-#include "game.cpp"
-#include "table.cpp"
+#include "game.hpp"
+#include "table.hpp"
 
 int main()
 {

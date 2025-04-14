@@ -15,7 +15,11 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(blackjack src/main.cpp
         src/card.cpp
-        src/game.cpp)
+        src/card.hpp
+        src/game.cpp
+        src/game.hpp
+        src/table.cpp
+        src/table.hpp)
 
 target_compile_features(blackjack PRIVATE cxx_std_17)
 target_link_libraries(blackjack PRIVATE SFML::Graphics)

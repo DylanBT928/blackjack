@@ -1,15 +1,9 @@
-class Card
-{
-   protected:
-    char card;
-    int value;
+#include "card.hpp"
 
-   public:
-    Card(char c, int v) : card(c), value(v) {}
+Card::Card(char c, int v) : card(c), value(v) {}
 
-    char getCard() { return card; }
+char Card::getCard() { return card; }
 
-    int getValue() { return value; }
+int Card::getValue() { return value; }
 
-    void setValue(int v) { value = v; }
-};
+void Card::setValue(int v) { value = v; }

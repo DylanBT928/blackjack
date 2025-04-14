@@ -1,29 +1,25 @@
-#include <SFML/Graphics.hpp>
+#include "table.hpp"
 
-class Table
+Table::Table() = default;
+
+void Table::setupTable()
 {
-   public:
-    explicit Table() = default;
+    sf::RenderWindow window(sf::VideoMode({1200, 800}), "Blackjack",
+                            sf::Style::Titlebar | sf::Style::Close);
 
-    void setupTable()
+    while (window.isOpen())
     {
-        sf::RenderWindow window(sf::VideoMode({1200, 800}), "Blackjack",
-                                sf::Style::Titlebar | sf::Style::Close);
-
-        while (window.isOpen())
+        while (const std::optional event = window.pollEvent())
         {
-            while (const std::optional event = window.pollEvent())
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Escape) ||
+                event->is<sf::Event::Closed>())
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Escape) ||
-                    event->is<sf::Event::Closed>())
-                {
-                    window.close();
-                }
+                window.close();
             }
-
-            window.clear(sf::Color(20, 60, 50));
-
-            window.display();
         }
+
+        window.clear(sf::Color(20, 60, 50));
+
+        window.display();
     }
-};
+}
