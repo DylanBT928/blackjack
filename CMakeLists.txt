@@ -31,3 +31,8 @@ add_custom_target(run
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
+add_custom_command(TARGET blackjack POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:blackjack>/assets
+)
+
