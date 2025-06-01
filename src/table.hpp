@@ -9,9 +9,11 @@ class Table
 {
    public:
     Table();
+    void handleMouseClick();
     void drawEmptyCards();
     void drawButtons();
-    void handleMouseClick();
+    void drawScores();
+    void drawRound();
 
    private:
     sf::RenderWindow window;
@@ -19,6 +21,7 @@ class Table
     Game game;
     bool isMousePressed;
     bool waitingToReset;
+    bool gameOver;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "table.hpp"
 
-Table::Table() : game(10), isMousePressed(false)
+Table::Table() : game(5), isMousePressed(false)
 {
     window = sf::RenderWindow(sf::VideoMode({1200, 800}), "Blackjack",
                               sf::Style::Titlebar | sf::Style::Close);
@@ -29,7 +29,20 @@ Table::Table() : game(10), isMousePressed(false)
             game.playDealerTurn();
 
         if (game.isRoundOver() && !waitingToReset)
-            waitingToReset = true;
+        {
+            // Don't go past the last round
+            if (game.getCurrentRound() < game.getRounds())
+            {
+                waitingToReset = true;
+            }
+            else
+            {
+                gameOver = true;
+            }
+        }
+
+        drawScores();
+        drawRound();
 
         window.display();
     }
@@ -37,6 +50,9 @@ Table::Table() : game(10), isMousePressed(false)
 
 void Table::handleMouseClick()
 {
+    if (gameOver)
+        return;
+
     sf::FloatRect hitButtonBounds({73.0f, 369.0f}, {378.0f, 81.0f});
     sf::FloatRect standButtonBounds({748.0f, 369.0f}, {378.0f, 81.0f});
     sf::FloatRect nextRoundButtonBounds = {{973.f, 723.f}, {154.f, 61.f}};
@@ -185,4 +201,60 @@ void Table::drawButtons()
                               nextRoundBtn.getSize() / 2.f);
         window.draw(nextLabel);
     }
+}
+
+void Table::drawScores()
+{
+    sf::Text scoreLabel(font);
+    scoreLabel.setString("Score:\n " + std::to_string(game.getPlayerScore()) +
+                         " - " + std::to_string(game.getDealerScore()));
+    scoreLabel.setCharacterSize(36);
+    scoreLabel.setFillColor(sf::Color::White);
+    scoreLabel.setStyle(sf::Text::Bold);
+
+    auto bounds = scoreLabel.getLocalBounds();
+    scoreLabel.setOrigin({bounds.position.x + bounds.size.x / 2.f,
+                          bounds.position.y + bounds.size.y / 2.f});
+
+    sf::Vector2f boxPosition = {494.f, 366.f};
+    sf::Vector2f boxSize = {225.f, 83.f};
+    sf::Vector2f centerPosition = boxPosition + boxSize / 2.f;
+
+    scoreLabel.setPosition(centerPosition);
+    window.draw(scoreLabel);
+}
+
+void Table::drawRound()
+{
+    sf::Text roundLabel(font);
+
+    if (gameOver)
+    {
+        int player = game.getPlayerScore();
+        int dealer = game.getDealerScore();
+        if (player > dealer)
+            roundLabel.setString("Player Wins!");
+        else if (dealer > player)
+            roundLabel.setString("Dealer Wins!");
+        else
+            roundLabel.setString("Tie!");
+    }
+    else
+        roundLabel.setString("Round " + std::to_string(game.getCurrentRound()) +
+                             " / " + std::to_string(game.getRounds()));
+
+    roundLabel.setCharacterSize(36);
+    roundLabel.setFillColor(sf::Color::White);
+    roundLabel.setStyle(sf::Text::Bold);
+
+    auto bounds = roundLabel.getLocalBounds();
+    roundLabel.setOrigin({bounds.position.x + bounds.size.x / 2.f,
+                          bounds.position.y + bounds.size.y / 2.f});
+
+    sf::Vector2f boxPos = {450.f, 22.f};
+    sf::Vector2f boxSize = {299.f, 68.f};
+    sf::Vector2f center = boxPos + boxSize / 2.f;
+
+    roundLabel.setPosition(center);
+    window.draw(roundLabel);
 }
