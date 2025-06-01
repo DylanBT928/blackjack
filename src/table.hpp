@@ -3,11 +3,18 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "game.hpp"
+
 class Table
 {
    public:
     Table();
-    void setupTable();
+    void drawEmptyCards();
+    void drawButtons();
+
+   private:
+    sf::RenderWindow window;
+    sf::Font font;
 };
 
 #endif

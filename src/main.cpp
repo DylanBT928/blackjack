@@ -1,10 +1,9 @@
-#include "game.hpp"
 #include "table.hpp"
 
 int main()
 {
     Table table;
-    table.setupTable();
+    table.drawEmptyCards();
 
     return 0;
 }
