@@ -11,11 +11,13 @@ class Table
     Table();
     void drawEmptyCards();
     void drawButtons();
+    void handleMouseClick();
 
    private:
     sf::RenderWindow window;
     sf::Font font;
     Game game;
+    bool isMousePressed;
 };
 
 #endif

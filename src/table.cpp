@@ -1,6 +1,6 @@
 #include "table.hpp"
 
-Table::Table() : game(10)
+Table::Table() : game(10), isMousePressed(false)
 {
     window = sf::RenderWindow(sf::VideoMode({1200, 800}), "Blackjack",
                               sf::Style::Titlebar | sf::Style::Close);
@@ -23,9 +23,35 @@ Table::Table() : game(10)
 
         drawEmptyCards();
         drawButtons();
+        handleMouseClick();
 
         window.display();
     }
+}
+
+void Table::handleMouseClick()
+{
+    sf::FloatRect hitButtonBounds({73.0f, 369.0f}, {378.0f, 81.0f});
+    sf::FloatRect standButtonBounds({748.0f, 369.0f}, {378.0f, 81.0f});
+
+    sf::Vector2f mousePos =
+        static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+    bool mouseIsCurrentlyPressed =
+        sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+
+    if (mouseIsCurrentlyPressed && !isMousePressed)
+    {
+        if (hitButtonBounds.contains(mousePos))
+        {
+            std::cout << "Hit clicked\n";
+        }
+        else if (standButtonBounds.contains(mousePos))
+        {
+            std::cout << "Stand clicked\n";
+        }
+    }
+
+    isMousePressed = mouseIsCurrentlyPressed;
 }
 
 void Table::drawEmptyCards()
