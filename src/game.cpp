@@ -7,7 +7,10 @@ Game::Game(int r)
       playerScore(0),
       dealerBust(0),
       playerBust(0),
-      stand(false)
+      stand(false),
+      dealerPlayed(false),
+      roundOver(false),
+      lastWinner(-2)
 {
     makeDeck();
     shuffleDeck();
@@ -65,6 +68,58 @@ void Game::hit(std::vector<Card> &hand)
         makeDeck();
         shuffleDeck();
     }
+}
+
+void Game::playerHit()
+{
+    hit(playerHand);
+    if (getHandTotal(playerHand) > 21)
+        playerBust = true;
+}
+
+void Game::playerStand() { stand = true; }
+
+bool Game::isPlayerBust() { return playerBust; }
+
+bool Game::isPlayerTurn() const { return !stand; }
+
+void Game::playDealerTurn()
+{
+    if (dealerPlayed)
+        return;
+
+    while (getHandTotal(dealerHand) <= 16)
+    {
+        hit(dealerHand);
+        if (getHandTotal(dealerHand) > 21)
+        {
+            dealerBust = true;
+            break;
+        }
+    }
+
+    lastWinner = chooseWinner();
+    if (lastWinner == 0)
+        playerScore++;
+    else if (lastWinner == 1)
+        dealerScore++;
+
+    roundOver = true;
+    dealerPlayed = true;
+}
+
+bool Game::isRoundOver() const { return roundOver; }
+
+int Game::getLastWinner() const { return lastWinner; }
+
+void Game::finishRound()
+{
+    stand = false;
+    dealerPlayed = false;
+    roundOver = false;
+    lastWinner = -2;
+    currentRound++;
+    resetRound();
 }
 
 void Game::resetRound()

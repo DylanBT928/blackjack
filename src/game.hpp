@@ -20,6 +20,9 @@ class Game
     bool playerBust;
     bool dealerBust;
     bool stand;
+    bool dealerPlayed;
+    bool roundOver;
+    int lastWinner;
 
    public:
     Game(int r = 1);
@@ -35,6 +38,14 @@ class Game
     void makeDeck();
     void shuffleDeck();
     void hit(std::vector<Card> &hand);
+    void playerHit();
+    void playerStand();
+    bool isPlayerBust();
+    bool isPlayerTurn() const;
+    void playDealerTurn();
+    bool isRoundOver() const;
+    int getLastWinner() const;
+    void finishRound();
     void resetRound();
     void playRound();
     int chooseWinner();

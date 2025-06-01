@@ -18,6 +18,7 @@ class Table
     sf::Font font;
     Game game;
     bool isMousePressed;
+    bool waitingToReset;
 };
 
 #endif

@@ -25,6 +25,12 @@ Table::Table() : game(10), isMousePressed(false)
         drawButtons();
         handleMouseClick();
 
+        if (!game.isPlayerTurn())
+            game.playDealerTurn();
+
+        if (game.isRoundOver() && !waitingToReset)
+            waitingToReset = true;
+
         window.display();
     }
 }
@@ -33,6 +39,7 @@ void Table::handleMouseClick()
 {
     sf::FloatRect hitButtonBounds({73.0f, 369.0f}, {378.0f, 81.0f});
     sf::FloatRect standButtonBounds({748.0f, 369.0f}, {378.0f, 81.0f});
+    sf::FloatRect nextRoundButtonBounds = {{973.f, 723.f}, {154.f, 61.f}};
 
     sf::Vector2f mousePos =
         static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
@@ -41,13 +48,27 @@ void Table::handleMouseClick()
 
     if (mouseIsCurrentlyPressed && !isMousePressed)
     {
-        if (hitButtonBounds.contains(mousePos))
+        if (waitingToReset && nextRoundButtonBounds.contains(mousePos))
         {
-            std::cout << "Hit clicked\n";
+            std::cout << "Next Round clicked\n";
+            game.finishRound();
+            waitingToReset = false;
+            isMousePressed = mouseIsCurrentlyPressed;
+            return;
         }
-        else if (standButtonBounds.contains(mousePos))
+
+        if (!waitingToReset)
         {
-            std::cout << "Stand clicked\n";
+            if (hitButtonBounds.contains(mousePos))
+            {
+                std::cout << "Hit clicked\n";
+                game.playerHit();
+            }
+            else if (standButtonBounds.contains(mousePos))
+            {
+                std::cout << "Stand clicked\n";
+                game.playerStand();
+            }
         }
     }
 
@@ -143,4 +164,25 @@ void Table::drawButtons()
                            standButton.getSize() / 2.f);
 
     window.draw(standLabel);
+
+    if (waitingToReset)
+    {
+        sf::RectangleShape nextRoundBtn({154.f, 61.f});
+        nextRoundBtn.setFillColor(sf::Color(166, 153, 147));
+        nextRoundBtn.setPosition({973.f, 723.f});
+        window.draw(nextRoundBtn);
+
+        sf::Text nextLabel(font);
+        nextLabel.setString("Next Round");
+        nextLabel.setCharacterSize(24);
+        nextLabel.setFillColor(sf::Color::Black);
+
+        auto nextBounds = nextLabel.getLocalBounds();
+        nextLabel.setOrigin({nextBounds.position.x + nextBounds.size.x / 2.f,
+                             nextBounds.position.y + nextBounds.size.y / 2.f});
+
+        nextLabel.setPosition(nextRoundBtn.getPosition() +
+                              nextRoundBtn.getSize() / 2.f);
+        window.draw(nextLabel);
+    }
 }
