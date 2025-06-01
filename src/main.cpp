@@ -3,7 +3,6 @@
 int main()
 {
     Table table;
-    table.drawEmptyCards();
 
     return 0;
 }

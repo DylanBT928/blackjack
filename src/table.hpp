@@ -15,6 +15,7 @@ class Table
    private:
     sf::RenderWindow window;
     sf::Font font;
+    Game game;
 };
 
 #endif
