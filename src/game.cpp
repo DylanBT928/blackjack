@@ -118,8 +118,8 @@ void Game::finishRound()
     dealerPlayed = false;
     roundOver = false;
     lastWinner = -2;
-    resetRound();
     currentRound++;
+    resetRound();
 }
 
 void Game::resetRound()
